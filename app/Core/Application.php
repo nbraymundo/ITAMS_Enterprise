@@ -19,6 +19,21 @@ class Application
         [\App\Controllers\Dashboard\DashboardController::class, 'index']
     );
 
+    $router->get(
+        '/login',
+        [\App\Controllers\Auth\LoginController::class, 'index']
+    );
+
+    $router->post(
+        '/login',
+        [\App\Controllers\Auth\LoginController::class, 'authenticate']
+    );
+
+    $router->get(
+        '/logout',
+        [\App\Controllers\Auth\LoginController::class, 'logout']
+    );
+
     $router->dispatch($request);
 }
 }
