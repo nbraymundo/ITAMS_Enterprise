@@ -1,0 +1,20 @@
+{
+    "name": "nbraymundo/itams-enterprise",
+    "description": "ITAMS Enterprise - Integrated IT Asset and Software Asset Management System",
+    "type": "project",
+    "license": "proprietary",
+    "require": {
+        "php": "^8.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
