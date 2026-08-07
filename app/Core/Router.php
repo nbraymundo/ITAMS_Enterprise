@@ -8,44 +8,37 @@ class Router
 {
     private array $routes = [];
 
-    public function get(string $uri, callable|array $action): void
+    public function get(string $uri, array $action): void
     {
         $this->routes['GET'][$this->normalize($uri)] = $action;
     }
 
-    public function post(string $uri, callable|array $action): void
+    public function post(string $uri, array $action): void
     {
         $this->routes['POST'][$this->normalize($uri)] = $action;
     }
 
-    public function dispatch(string $method, string $uri): void
+    public function dispatch(Request $request): void
     {
-        $uri = $this->normalize($uri);
+        $method = $request->method();
+        $uri = $request->uri();
 
         if (!isset($this->routes[$method][$uri])) {
             http_response_code(404);
+
             echo "<h1>404</h1>";
-            echo "<p>Page Not Found</p>";
+            echo "<p>Route Not Found</p>";
+
             return;
         }
 
-        $action = $this->routes[$method][$uri];
+        [$controller, $action] = $this->routes[$method][$uri];
 
-        if (is_callable($action)) {
-            $action();
-            return;
-        }
-
-        [$controller, $method] = $action;
-
-        (new $controller())->$method();
+        (new $controller())->$action();
     }
 
     private function normalize(string $uri): string
     {
-        $uri = parse_url($uri, PHP_URL_PATH);
-        $uri = rtrim($uri, '/');
-
-        return $uri ?: '/';
+        return rtrim($uri, '/') ?: '/';
     }
 }

@@ -4,11 +4,24 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
-class HomeController
+use App\Core\Config;
+
+class HomeController extends Controller
 {
     public function index(): void
     {
-        echo "<h1>ITAMS Enterprise</h1>";
-        echo "<p>Router Working Successfully</p>";
+        $config = Config::get('app');
+
+        echo "<h1>{$config['name']}</h1>";
+
+        echo "<hr>";
+
+        echo "Environment : {$config['environment']}<br>";
+
+        echo "Timezone : {$config['timezone']}<br>";
+
+        echo "Debug : ";
+
+        echo $config['debug'] ? "Enabled" : "Disabled";
     }
 }

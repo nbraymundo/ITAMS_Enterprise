@@ -7,16 +7,18 @@ namespace App\Core;
 class Application
 {
     public function run(): void
-    {
-        Database::connection();
+{
+    Database::connection();
 
-        $router = new Router();
+    $request = new Request();
 
-        $router->get('/', [\App\Controllers\HomeController::class, 'index']);
+    $router = new Router();
 
-        $router->dispatch(
-            $_SERVER['REQUEST_METHOD'],
-            $_SERVER['REQUEST_URI']
-        );
-    }
+    $router->get(
+        '/',
+        [\App\Controllers\HomeController::class, 'index']
+    );
+
+    $router->dispatch($request);
+}
 }

@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 return [
 
-    'app_name' => 'ITAMS Enterprise',
+    'name' => 'ITAMS Enterprise',
 
-    'version' => '1.0.0',
+    'environment' => 'development',
 
     'timezone' => 'Asia/Riyadh',
 
-    'debug' => true
+    'debug' => true,
 
 ];
