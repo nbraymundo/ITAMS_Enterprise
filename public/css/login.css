@@ -1,0 +1,306 @@
+/* ==========================================================
+   ITAMS Enterprise
+   Login UI v1.0
+   ========================================================== */
+
+html,
+body{
+    height:100%;
+}
+
+body.login-page{
+
+    margin:0;
+
+    background:#f4f7fc;
+
+    font-family:"Segoe UI",Arial,sans-serif;
+
+}
+
+/* ===========================================
+   HERO PANEL
+=========================================== */
+
+.hero-panel{
+
+    position:relative;
+
+    min-height:100vh;
+
+    background:
+        linear-gradient(
+            rgba(20,45,90,.55),
+            rgba(20,45,90,.70)
+        ),
+        url('/images/login/wallpaper.jpg');
+
+    background-size:cover;
+
+    background-position:center;
+
+    background-repeat:no-repeat;
+
+}
+
+.hero-overlay{
+
+    position:absolute;
+
+    inset:0;
+
+    display:flex;
+
+    align-items:flex-end;
+
+}
+
+.hero-content{
+
+    color:#fff;
+
+    padding:70px;
+
+    max-width:600px;
+
+}
+
+.hero-logo{
+
+    width:220px;
+
+    margin-bottom:35px;
+
+}
+
+.hero-title{
+
+    font-size:44px;
+
+    font-weight:700;
+
+    margin-bottom:15px;
+
+}
+
+.hero-subtitle{
+
+    font-size:20px;
+
+    line-height:1.6;
+
+    opacity:.95;
+
+}
+
+.hero-divider{
+
+    width:90px;
+
+    height:4px;
+
+    background:#fff;
+
+    border-radius:30px;
+
+    margin:35px 0;
+
+}
+
+.hero-slogan{
+
+    font-size:18px;
+
+    margin-bottom:30px;
+
+}
+
+.hero-features{
+
+    list-style:none;
+
+    padding:0;
+
+    margin:0;
+
+}
+
+.hero-features li{
+
+    font-size:17px;
+
+    margin-bottom:15px;
+
+}
+
+.hero-features i{
+
+    margin-right:12px;
+
+}
+
+/* ===========================================
+   LOGIN PANEL
+=========================================== */
+
+.login-panel{
+
+    min-height:100vh;
+
+    background:#ffffff;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:60px;
+
+}
+
+.login-wrapper{
+
+    width:100%;
+
+    max-width:430px;
+
+}
+
+.login-title{
+
+    font-size:38px;
+
+    font-weight:700;
+
+    color:#111827;
+
+    margin-bottom:10px;
+
+}
+
+.login-subtitle{
+
+    color:#6b7280;
+
+    margin-bottom:40px;
+
+}
+
+/* ===========================================
+   FORM
+=========================================== */
+
+.form-label{
+
+    font-weight:600;
+
+}
+
+.input-group-text{
+
+    background:#fff;
+
+}
+
+.form-control{
+
+    height:52px;
+
+    border-radius:0;
+
+}
+
+.input-group>.form-control{
+
+    border-left:0;
+
+}
+
+.input-group-text{
+
+    border-right:0;
+
+}
+
+/* ===========================================
+   BUTTON
+=========================================== */
+
+.btn-primary{
+
+    height:52px;
+
+    border-radius:10px;
+
+    font-size:16px;
+
+    font-weight:600;
+
+    background:#2563eb;
+
+    border:none;
+
+    transition:.25s;
+
+}
+
+.btn-primary:hover{
+
+    background:#1d4ed8;
+
+}
+
+/* ===========================================
+   FOOTER
+=========================================== */
+
+.login-footer{
+
+    margin-top:45px;
+
+    text-align:center;
+
+    color:#9ca3af;
+
+    font-size:14px;
+
+}
+
+/* ===========================================
+   LINK
+=========================================== */
+
+.forgot-link{
+
+    text-decoration:none;
+
+}
+
+/* ===========================================
+   MOBILE
+=========================================== */
+
+@media (max-width:991px){
+
+.hero-panel{
+
+    display:none;
+
+}
+
+.login-panel{
+
+    width:100%;
+
+    padding:35px;
+
+}
+
+.login-wrapper{
+
+    max-width:450px;
+
+}
+
+}

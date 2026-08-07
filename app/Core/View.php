@@ -6,7 +6,11 @@ namespace App\Core;
 
 class View
 {
-    public static function render(string $view, array $data = []): void
+    public static function render(
+        string $view,
+        array $data = [],
+        string $layout = 'app'
+    ): void
     {
         extract($data);
 
@@ -22,6 +26,12 @@ class View
 
         $content = ob_get_clean();
 
-        require dirname(__DIR__) . "/layouts/app.php";
+        $layoutFile = dirname(__DIR__) . "/layouts/{$layout}.php";
+
+        if (!file_exists($layoutFile)) {
+            throw new \RuntimeException("Layout '{$layout}' not found.");
+        }
+
+        require $layoutFile;
     }
 }

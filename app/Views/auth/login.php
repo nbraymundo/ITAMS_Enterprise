@@ -1,53 +1,7 @@
-<h1><?= $title ?></h1>
+<?php
 
-<p>
+declare(strict_types=1);
 
-🏢 ITAMS Enterprise
+require __DIR__ . '/brand-panel.php';
 
-</p>
-
-<p>
-
-Integrated IT Asset & Software Asset Management System
-
-</p>
-
-<form method="post" action="/login">
-
-    <label>
-
-        Username
-
-    </label>
-
-    <br>
-
-    <input
-        type="text"
-        name="username"
-    >
-
-    <br><br>
-
-    <label>
-
-        Password
-
-    </label>
-
-    <br>
-
-    <input
-        type="password"
-        name="password"
-    >
-
-    <br><br>
-
-    <button type="submit">
-
-        Sign In
-
-    </button>
-
-</form>
+require __DIR__ . '/login-form.php';

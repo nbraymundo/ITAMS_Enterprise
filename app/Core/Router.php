@@ -21,7 +21,8 @@ class Router
     public function dispatch(Request $request): void
     {
         $method = $request->method();
-        $uri = $request->uri();
+        
+        $uri = $this->normalize($request->uri());
 
         if (!isset($this->routes[$method][$uri])) {
             http_response_code(404);
