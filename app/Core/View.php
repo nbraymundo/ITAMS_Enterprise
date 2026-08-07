@@ -10,12 +10,18 @@ class View
     {
         extract($data);
 
-        $file = dirname(__DIR__) . "/Views/{$view}.php";
+        $viewFile = dirname(__DIR__) . "/Views/{$view}.php";
 
-        if (!file_exists($file)) {
+        if (!file_exists($viewFile)) {
             throw new \RuntimeException("View '{$view}' not found.");
         }
 
-        require $file;
+        ob_start();
+
+        require $viewFile;
+
+        $content = ob_get_clean();
+
+        require dirname(__DIR__) . "/layouts/app.php";
     }
 }

@@ -16,7 +16,7 @@ class Application
 
     $router->get(
         '/',
-        [\App\Controllers\HomeController::class, 'index']
+        [\App\Controllers\Dashboard\DashboardController::class, 'index']
     );
 
     $router->dispatch($request);
