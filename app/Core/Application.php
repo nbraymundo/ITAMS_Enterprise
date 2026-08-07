@@ -10,8 +10,13 @@ class Application
     {
         Database::connection();
 
-        echo "<h1>ITAMS Enterprise</h1>";
-        echo "<p>Application Bootstrap Successful</p>";
-        echo "<p style='color:green;'>Database Connected Successfully</p>";
+        $router = new Router();
+
+        $router->get('/', [\App\Controllers\HomeController::class, 'index']);
+
+        $router->dispatch(
+            $_SERVER['REQUEST_METHOD'],
+            $_SERVER['REQUEST_URI']
+        );
     }
 }
