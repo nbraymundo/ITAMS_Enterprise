@@ -1,7 +1,16 @@
 <?php
 
 declare(strict_types=1);
+?>
 
-require __DIR__ . '/brand-panel.php';
+<div class="container-fluid p-0">
 
-require __DIR__ . '/login-form.php';
+    <div class="row g-0 vh-100">
+
+        <?php require __DIR__ . '/brand-panel.php'; ?>
+
+        <?php require __DIR__ . '/login-form.php'; ?>
+
+    </div>
+
+</div>
