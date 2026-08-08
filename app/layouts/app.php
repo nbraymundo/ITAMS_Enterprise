@@ -1,30 +1,33 @@
-<!DOCTYPE html>
+<?php
 
+declare(strict_types=1);
+?>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
 
-    <?php require '../app/partials/head.php'; ?>
+    <?php require dirname(__DIR__) . '/partials/head.php'; ?>
 
 </head>
 
 <body>
 
-<?php require '../app/partials/sidebar.php'; ?>
+    <?php require dirname(__DIR__) . '/partials/sidebar.php'; ?>
 
-<div class="main-wrapper">
+    <div class="main-wrapper">
 
-    <?php require '../app/partials/header.php'; ?>
+        <?php require dirname(__DIR__) . '/partials/header.php'; ?>
 
-    <main class="content">
+        <main class="content">
 
-        <?= $content ?>
+            <?= $content ?>
 
-    </main>
+        </main>
 
-    <?php require '../app/partials/footer.php'; ?>
+        <?php require dirname(__DIR__) . '/partials/footer.php'; ?>
 
-</div>
+    </div>
 
 </body>
 

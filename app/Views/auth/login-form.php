@@ -1,3 +1,8 @@
+<?php
+
+declare(strict_types=1);
+?>
+
 <div class="col-lg-4 col-12 login-panel">
 
     <div class="login-wrapper">
@@ -10,12 +15,31 @@
             Sign in to continue to ITAMS Enterprise
         </p>
 
-        <form method="POST" action="/login">
+        <?php if (!empty($error)): ?>
+
+            <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+
+                <?= htmlspecialchars($error) ?>
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close">
+                </button>
+
+            </div>
+
+        <?php endif; ?>
+
+        <form method="POST" action="/login" autocomplete="off">
 
             <!-- Username -->
             <div class="mb-4">
 
-                <label class="form-label">
+                <label for="username" class="form-label">
                     Username
                 </label>
 
@@ -27,9 +51,12 @@
 
                     <input
                         type="text"
-                        class="form-control"
+                        id="username"
                         name="username"
+                        class="form-control"
+                        value="<?= htmlspecialchars($username ?? '') ?>"
                         placeholder="Enter your username"
+                        autocomplete="username"
                         required>
 
                 </div>
@@ -37,9 +64,9 @@
             </div>
 
             <!-- Password -->
-            <div class="mb-3">
+            <div class="mb-4">
 
-                <label class="form-label">
+                <label for="password" class="form-label">
                     Password
                 </label>
 
@@ -51,16 +78,18 @@
 
                     <input
                         type="password"
-                        class="form-control"
                         id="password"
                         name="password"
+                        class="form-control"
                         placeholder="Enter your password"
+                        autocomplete="current-password"
                         required>
 
                     <button
-                        class="btn btn-outline-secondary"
                         type="button"
-                        id="togglePassword">
+                        class="btn btn-outline-secondary"
+                        id="togglePassword"
+                        aria-label="Show Password">
 
                         <i class="bi bi-eye"></i>
 
@@ -70,13 +99,15 @@
 
             </div>
 
-            <!-- Remember -->
+            <!-- Remember Me -->
             <div class="form-check mb-4">
 
                 <input
                     class="form-check-input"
                     type="checkbox"
-                    id="remember">
+                    id="remember"
+                    name="remember"
+                    value="1">
 
                 <label
                     class="form-check-label"
@@ -92,11 +123,11 @@
             <div class="d-grid mb-3">
 
                 <button
-                    class="btn btn-primary btn-lg"
                     type="submit"
+                    class="btn btn-primary btn-lg"
                     id="loginButton">
 
-                    <i class="bi bi-box-arrow-in-right"></i>
+                    <i class="bi bi-box-arrow-in-right me-2"></i>
 
                     Sign In
 

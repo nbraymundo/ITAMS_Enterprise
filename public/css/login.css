@@ -59,15 +59,15 @@ body.login-page{
 
     color:#fff;
 
-    padding:70px;
+    padding:90px;
 
-    max-width:600px;
+    max-width:650px;
 
 }
 
 .hero-logo{
 
-    width:220px;
+    width:280px;
 
     margin-bottom:35px;
 
@@ -223,6 +223,12 @@ body.login-page{
 
 }
 
+.input-group .btn{
+    border-left:0;
+    border-radius:0 12px 12px 0;
+    height:56px;
+}
+
 /* ===========================================
    BUTTON
 =========================================== */
@@ -249,6 +255,16 @@ body.login-page{
 
     background:#1d4ed8;
 
+}
+
+.btn-enterprise{
+    background:linear-gradient(180deg,#2563EB,#1D4ED8);
+    transition:.25s;
+}
+
+.btn-enterprise:hover{
+    transform:translateY(-2px);
+    box-shadow:0 12px 30px rgba(37,99,235,.25);
 }
 
 /* ===========================================
@@ -284,9 +300,13 @@ body.login-page{
 @media (max-width:991px){
 
 .hero-panel{
-
-    display:none;
-
+    background:
+        linear-gradient(
+            rgba(18,45,85,.45),
+            rgba(18,45,85,.60)
+        ),
+        url('/images/login/wallpaper.jpg') center center;
+    background-size:cover;
 }
 
 .login-panel{
@@ -298,9 +318,11 @@ body.login-page{
 }
 
 .login-wrapper{
-
-    max-width:450px;
-
+    background:#fff;
+    border-radius:20px;
+    padding:60px;
+    box-shadow:
+        0 20px 60px rgba(15,23,42,.10);
 }
 
 }
