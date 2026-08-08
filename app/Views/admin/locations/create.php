@@ -1,6 +1,8 @@
 <?php
 
-$branch = $branch ?? [];
+declare(strict_types=1);
+
+$branches = $branches ?? [];
 $error = $error ?? '';
 
 ?>
@@ -9,20 +11,19 @@ $error = $error ?? '';
 
     <div>
 
-        <h2>Edit Branch</h2>
+        <h2>Add Location</h2>
 
         <p class="text-muted mb-0">
-            Update branch information.
+            Create a new asset location.
         </p>
 
     </div>
 
     <a
-        href="/admin/branches"
+        href="/admin/locations"
         class="btn btn-secondary">
 
         <i class="bi bi-arrow-left"></i>
-
         Back
 
     </a>
@@ -34,11 +35,7 @@ $error = $error ?? '';
 
     <div class="alert alert-danger">
 
-        <?= htmlspecialchars(
-            (string) $error,
-            ENT_QUOTES,
-            'UTF-8'
-        ) ?>
+        <?= htmlspecialchars($error) ?>
 
     </div>
 
@@ -51,19 +48,9 @@ $error = $error ?? '';
 
         <form
             method="POST"
-            action="/admin/branches/update">
+            action="/admin/locations">
 
-            <input
-                type="hidden"
-                name="id"
-                value="<?= (int) ($branch['id'] ?? 0) ?>">
-
-
-            <div class="row g-3">
-
-                <?php require __DIR__ . '/form.php'; ?>
-
-            </div>
+            <?php require __DIR__ . '/form.php'; ?>
 
 
             <div class="mt-4">
@@ -73,14 +60,13 @@ $error = $error ?? '';
                     class="btn btn-primary">
 
                     <i class="bi bi-save"></i>
-
-                    Save Changes
+                    Save
 
                 </button>
 
 
                 <a
-                    href="/admin/branches"
+                    href="/admin/locations"
                     class="btn btn-secondary">
 
                     Cancel

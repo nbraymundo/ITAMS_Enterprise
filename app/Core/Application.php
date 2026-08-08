@@ -13,6 +13,8 @@ use App\Controllers\Admin\BrandController;
 use App\Controllers\Admin\ModelController;
 use App\Controllers\Admin\CompanyController;
 use App\Controllers\Admin\BranchController;
+use App\Controllers\Admin\LocationController;
+use App\Controllers\Admin\EmployeeController;
 use App\Controllers\Admin\AuditLogController;
 
 class Application
@@ -331,6 +333,78 @@ class Application
         $router->post(
             '/admin/branches/deactivate',
             [BranchController::class, 'deactivate']
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | Locations
+        |--------------------------------------------------------------------------
+        */
+
+        $router->get(
+            '/admin/locations',
+            [LocationController::class, 'index']
+        );
+
+        $router->get(
+            '/admin/locations/create',
+            [LocationController::class, 'create']
+        );
+
+        $router->post(
+            '/admin/locations',
+            [LocationController::class, 'store']
+        );
+
+        $router->get(
+            '/admin/locations/edit',
+            [LocationController::class, 'edit']
+        );
+
+        $router->post(
+            '/admin/locations/update',
+            [LocationController::class, 'update']
+        );
+
+        $router->post(
+            '/admin/locations/deactivate',
+            [LocationController::class, 'deactivate']
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | Employees
+        |--------------------------------------------------------------------------
+        */
+
+        $router->get(
+            '/admin/employees',
+            [EmployeeController::class, 'index']
+        );
+
+        $router->get(
+            '/admin/employees/create',
+            [EmployeeController::class, 'create']
+        );
+
+        $router->post(
+            '/admin/employees',
+            [EmployeeController::class, 'store']
+        );
+
+        $router->get(
+            '/admin/employees/edit',
+            [EmployeeController::class, 'edit']
+        );
+
+        $router->post(
+            '/admin/employees/update',
+            [EmployeeController::class, 'update']
+        );
+
+        $router->post(
+            '/admin/employees/deactivate',
+            [EmployeeController::class, 'deactivate']
         );
 
         /*
