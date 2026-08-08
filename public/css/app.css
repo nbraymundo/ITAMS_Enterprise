@@ -1,110 +1,295 @@
 /* ==========================================================
    ITAMS Enterprise v1.0
-   Global Theme
+   Global Theme + Application Layout
    ========================================================== */
 
-/* ---------- Theme Colors ---------- */
 
-:root{
+/* ==========================================================
+   Theme Colors
+   ========================================================== */
 
-    --primary:#2563EB;
-    --primary-hover:#1D4ED8;
+:root {
 
-    --success:#16A34A;
-    --warning:#F59E0B;
-    --danger:#DC2626;
+    --primary: #2563EB;
+    --primary-hover: #1D4ED8;
 
-    --background:#F4F7FC;
+    --success: #16A34A;
+    --warning: #F59E0B;
+    --danger: #DC2626;
 
-    --card:#FFFFFF;
+    --background: #F4F7FC;
 
-    --text:#111827;
+    --card: #FFFFFF;
 
-    --text-light:#6B7280;
+    --text: #111827;
+    --text-light: #6B7280;
 
-    --border:#D9E2EC;
+    --border: #D9E2EC;
 
     --shadow:
-        0 20px 60px rgba(15,23,42,.08);
+        0 20px 60px rgba(15, 23, 42, .08);
 
-    --radius:18px;
+    --radius: 18px;
 
-}
-
-/* ---------- Reset ---------- */
-
-*{
-
-    margin:0;
-
-    padding:0;
-
-    box-sizing:border-box;
+    --sidebar-width: 260px;
 
 }
 
-/* ---------- Body ---------- */
 
-body{
+/* ==========================================================
+   Reset
+   ========================================================== */
+
+* {
+
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+}
+
+
+/* ==========================================================
+   Body
+   ========================================================== */
+
+body {
 
     font-family:
         "Segoe UI",
         Arial,
         sans-serif;
 
-    background:var(--background);
+    background: var(--background);
 
-    color:var(--text);
+    color: var(--text);
 
-}
-
-/* ---------- Links ---------- */
-
-a{
-
-    text-decoration:none;
+    min-height: 100vh;
 
 }
 
-/* ---------- Card ---------- */
 
-.card-enterprise{
+/* ==========================================================
+   Application Layout
+   ========================================================== */
 
-    background:var(--card);
+body {
 
-    border-radius:var(--radius);
-
-    box-shadow:var(--shadow);
-
-}
-
-/* ---------- Inputs ---------- */
-
-.form-control{
-
-    height:56px;
-
-    border-radius:12px;
-
-    border:1px solid var(--border);
+    display: flex;
+    align-items: stretch;
 
 }
 
-.form-control:focus{
 
-    border-color:var(--primary);
+/* ==========================================================
+   Sidebar
+   ========================================================== */
 
-    box-shadow:0 0 0 .20rem rgba(37,99,235,.15);
+.sidebar {
+
+    flex: 0 0 var(--sidebar-width);
+
+    width: var(--sidebar-width);
+
+    min-height: 100vh;
+
+    background: #FFFFFF;
+
+    border-right: 1px solid var(--border);
+
+    padding: 24px 18px;
+
+    position: sticky;
+
+    top: 0;
+
+    height: 100vh;
+
+    overflow-y: auto;
+
+    z-index: 1000;
 
 }
 
-/* ---------- Buttons ---------- */
 
-.btn-enterprise{
+/* Sidebar list */
 
-    height:56px;
+.sidebar ul {
 
-    border-radius:12px;
+    margin: 0;
+
+    padding: 0;
+
+}
+
+
+/* Sidebar links */
+
+.sidebar a {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    width: 100%;
+
+    padding: 10px 12px;
+
+    border-radius: 8px;
+
+    color: var(--primary);
+
+    transition:
+        background-color .2s ease,
+        color .2s ease;
+
+}
+
+
+/* Sidebar link hover */
+
+.sidebar a:hover {
+
+    background: #EFF6FF;
+
+    color: var(--primary-hover);
+
+}
+
+
+/* Sidebar icons */
+
+.sidebar i {
+
+    width: 20px;
+
+    text-align: center;
+
+    flex-shrink: 0;
+
+}
+
+
+/* Sidebar horizontal separator */
+
+.sidebar hr {
+
+    margin: 20px 0;
+
+    border: 0;
+
+    border-top: 1px solid var(--border);
+
+    opacity: 1;
+
+}
+
+
+/* Administration heading */
+
+.sidebar .text-muted {
+
+    color: var(--text-light) !important;
+
+}
+
+
+/* ==========================================================
+   Main Application Wrapper
+   ========================================================== */
+
+.main-wrapper {
+
+    flex: 1 1 auto;
+
+    min-width: 0;
+
+    min-height: 100vh;
+
+    display: flex;
+
+    flex-direction: column;
+
+}
+
+
+/* ==========================================================
+   Main Content
+   ========================================================== */
+
+.content {
+
+    flex: 1 1 auto;
+
+    width: 100%;
+
+    padding: 0;
+
+}
+
+
+/* ==========================================================
+   Links
+   ========================================================== */
+
+a {
+
+    text-decoration: none;
+
+}
+
+
+/* ==========================================================
+   Card
+   ========================================================== */
+
+.card-enterprise {
+
+    background: var(--card);
+
+    border-radius: var(--radius);
+
+    box-shadow: var(--shadow);
+
+}
+
+
+/* ==========================================================
+   Inputs
+   ========================================================== */
+
+.form-control {
+
+    height: 56px;
+
+    border-radius: 12px;
+
+    border: 1px solid var(--border);
+
+}
+
+
+.form-control:focus {
+
+    border-color: var(--primary);
+
+    box-shadow:
+        0 0 0 .20rem rgba(37, 99, 235, .15);
+
+}
+
+
+/* ==========================================================
+   Buttons
+   ========================================================== */
+
+.btn-enterprise {
+
+    height: 56px;
+
+    border-radius: 12px;
 
     background:
         linear-gradient(
@@ -113,21 +298,87 @@ a{
             #1D4ED8
         );
 
-    color:#fff;
+    color: #fff;
 
-    border:none;
+    border: none;
 
-    font-weight:600;
+    font-weight: 600;
 
-    transition:.25s;
+    transition: .25s;
 
 }
 
-.btn-enterprise:hover{
 
-    transform:translateY(-2px);
+.btn-enterprise:hover {
+
+    transform: translateY(-2px);
 
     box-shadow:
-        0 12px 30px rgba(37,99,235,.25);
+        0 12px 30px rgba(37, 99, 235, .25);
+
+}
+
+
+/* ==========================================================
+   Responsive Layout
+   ========================================================== */
+
+@media (max-width: 991px) {
+
+    body {
+
+        display: block;
+
+    }
+
+
+    .sidebar {
+
+        position: relative;
+
+        width: 100%;
+
+        min-height: auto;
+
+        height: auto;
+
+        border-right: none;
+
+        border-bottom: 1px solid var(--border);
+
+        padding: 16px;
+
+    }
+
+
+    .main-wrapper {
+
+        width: 100%;
+
+        min-height: auto;
+
+    }
+
+}
+
+
+/* ==========================================================
+   Small Screens
+   ========================================================== */
+
+@media (max-width: 576px) {
+
+    .sidebar {
+
+        padding: 12px;
+
+    }
+
+
+    .content {
+
+        width: 100%;
+
+    }
 
 }

@@ -10,6 +10,9 @@ use App\Controllers\Asset\AssetController;
 use App\Controllers\Admin\AssetCategoryController;
 use App\Controllers\Admin\ManufacturerController;
 use App\Controllers\Admin\BrandController;
+use App\Controllers\Admin\ModelController;
+use App\Controllers\Admin\CompanyController;
+use App\Controllers\Admin\BranchController;
 use App\Controllers\Admin\AuditLogController;
 
 class Application
@@ -220,6 +223,114 @@ class Application
         $router->post(
             '/admin/brands/deactivate',
             [BrandController::class, 'deactivate']
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | Asset Models
+        |--------------------------------------------------------------------------
+        */
+
+        $router->get(
+            '/admin/models',
+            [ModelController::class, 'index']
+        );
+
+        $router->get(
+            '/admin/models/create',
+            [ModelController::class, 'create']
+        );
+
+        $router->post(
+            '/admin/models',
+            [ModelController::class, 'store']
+        );
+
+        $router->get(
+            '/admin/models/edit',
+            [ModelController::class, 'edit']
+        );
+
+        $router->post(
+            '/admin/models/update',
+            [ModelController::class, 'update']
+        );
+
+        $router->post(
+            '/admin/models/deactivate',
+            [ModelController::class, 'deactivate']
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | Companies
+        |--------------------------------------------------------------------------
+        */
+
+        $router->get(
+            '/admin/companies',
+            [CompanyController::class, 'index']
+        );
+
+        $router->get(
+            '/admin/companies/create',
+            [CompanyController::class, 'create']
+        );
+
+        $router->post(
+            '/admin/companies',
+            [CompanyController::class, 'store']
+        );
+
+        $router->get(
+            '/admin/companies/edit',
+            [CompanyController::class, 'edit']
+        );
+
+        $router->post(
+            '/admin/companies/update',
+            [CompanyController::class, 'update']
+        );
+
+        $router->post(
+            '/admin/companies/deactivate',
+            [CompanyController::class, 'deactivate']
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | Branches
+        |--------------------------------------------------------------------------
+        */
+
+        $router->get(
+            '/admin/branches',
+            [BranchController::class, 'index']
+        );
+
+        $router->get(
+            '/admin/branches/create',
+            [BranchController::class, 'create']
+        );
+
+        $router->post(
+            '/admin/branches',
+            [BranchController::class, 'store']
+        );
+
+        $router->get(
+            '/admin/branches/edit',
+            [BranchController::class, 'edit']
+        );
+
+        $router->post(
+            '/admin/branches/update',
+            [BranchController::class, 'update']
+        );
+
+        $router->post(
+            '/admin/branches/deactivate',
+            [BranchController::class, 'deactivate']
         );
 
         /*
