@@ -8,23 +8,23 @@ use App\Core\Request;
 use App\Core\Response;
 use App\Core\Session;
 use App\Core\View;
-use App\Services\EmployeeService;
+use App\Services\JobTitleService;
 
-class EmployeeController
+class JobTitleController
 {
-    private EmployeeService $service;
+    private JobTitleService $service;
 
     private Request $request;
 
     public function __construct()
     {
-        $this->service = new EmployeeService();
+        $this->service = new JobTitleService();
 
         $this->request = new Request();
     }
 
     /**
-     * List Employees
+     * List Job Titles
      */
     public function index(): void
     {
@@ -32,16 +32,16 @@ class EmployeeController
             $this->request->get('search', '')
         );
 
-        $employees = $this->service->all(
+        $jobTitles = $this->service->all(
             $search
         );
 
         View::render(
-            'admin/employees/index',
+            'admin/job-titles/index',
             [
-                'title' => 'Employees',
+                'title' => 'Job Titles',
 
-                'employees' => $employees,
+                'jobTitles' => $jobTitles,
 
                 'search' => $search,
 
@@ -61,36 +61,16 @@ class EmployeeController
      */
     public function create(): void
     {
-        $jobTitles = $this->service->jobTitles();
-
-        $companies = $this->service->companies();
-
-        $branches = $this->service->branches();
-
-        $departments = $this->service->departments();
-
-        $locations = $this->service->locations();
-
         View::render(
-            'admin/employees/create',
+            'admin/job-titles/create',
             [
-                'title' => 'Add Employee',
-
-                'jobTitles' => $jobTitles,
-
-                'companies' => $companies,
-
-                'branches' => $branches,
-
-                'departments' => $departments,
-
-                'locations' => $locations
+                'title' => 'Add Job Title'
             ]
         );
     }
 
     /**
-     * Store Employee
+     * Store Job Title
      */
     public function store(): void
     {
@@ -106,7 +86,7 @@ class EmployeeController
             );
 
             Response::redirect(
-                '/admin/employees/create'
+                '/admin/job-titles/create'
             );
         }
 
@@ -116,7 +96,7 @@ class EmployeeController
         );
 
         Response::redirect(
-            '/admin/employees'
+            '/admin/job-titles'
         );
     }
 
@@ -131,60 +111,42 @@ class EmployeeController
 
             Session::flash(
                 'error',
-                'Invalid employee ID.'
+                'Invalid Job Title ID.'
             );
 
             Response::redirect(
-                '/admin/employees'
+                '/admin/job-titles'
             );
         }
 
-        $employee = $this->service->find($id);
+        $jobTitle = $this->service->find(
+            $id
+        );
 
-        if (!$employee) {
+        if (!$jobTitle) {
 
             Session::flash(
                 'error',
-                'Employee not found.'
+                'Job Title not found.'
             );
 
             Response::redirect(
-                '/admin/employees'
+                '/admin/job-titles'
             );
         }
 
-        $jobTitles = $this->service->jobTitles();
-
-        $companies = $this->service->companies();
-
-        $branches = $this->service->branches();
-
-        $departments = $this->service->departments();
-
-        $locations = $this->service->locations();
-
         View::render(
-            'admin/employees/edit',
+            'admin/job-titles/edit',
             [
-                'title' => 'Edit Employee',
+                'title' => 'Edit Job Title',
 
-                'employee' => $employee,
-
-                'jobTitles' => $jobTitles,
-
-                'companies' => $companies,
-
-                'branches' => $branches,
-
-                'departments' => $departments,
-
-                'locations' => $locations
+                'jobTitle' => $jobTitle
             ]
         );
     }
 
     /**
-     * Update Employee
+     * Update Job Title
      */
     public function update(): void
     {
@@ -205,12 +167,12 @@ class EmployeeController
         );
 
         Response::redirect(
-            '/admin/employees'
+            '/admin/job-titles'
         );
     }
 
     /**
-     * Deactivate Employee
+     * Deactivate Job Title
      */
     public function deactivate(): void
     {
@@ -230,7 +192,7 @@ class EmployeeController
         );
 
         Response::redirect(
-            '/admin/employees'
+            '/admin/job-titles'
         );
     }
 }

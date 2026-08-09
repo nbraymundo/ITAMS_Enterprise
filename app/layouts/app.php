@@ -1,8 +1,11 @@
 <?php
 
 declare(strict_types=1);
+
 ?>
+
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
@@ -11,13 +14,30 @@ declare(strict_types=1);
 
 </head>
 
-<body>
+
+<body class="app-body">
+
+
+    <!-- =====================================================
+         APPLICATION SIDEBAR
+         ====================================================== -->
 
     <?php require dirname(__DIR__) . '/partials/sidebar.php'; ?>
 
+
+    <!-- =====================================================
+         APPLICATION WRAPPER
+         ====================================================== -->
+
     <div class="main-wrapper">
 
+
+        <!-- Header -->
+
         <?php require dirname(__DIR__) . '/partials/header.php'; ?>
+
+
+        <!-- Main Content -->
 
         <main class="content">
 
@@ -25,9 +45,20 @@ declare(strict_types=1);
 
         </main>
 
+
+        <!-- Footer -->
+
         <?php require dirname(__DIR__) . '/partials/footer.php'; ?>
 
     </div>
+
+
+    <!-- =====================================================
+         APPLICATION JAVASCRIPT
+         ====================================================== -->
+
+    <script src="/js/app.js"></script>
+
 
 </body>
 

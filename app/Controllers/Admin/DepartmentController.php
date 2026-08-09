@@ -8,23 +8,21 @@ use App\Core\Request;
 use App\Core\Response;
 use App\Core\Session;
 use App\Core\View;
-use App\Services\EmployeeService;
+use App\Services\DepartmentService;
 
-class EmployeeController
+class DepartmentController
 {
-    private EmployeeService $service;
-
+    private DepartmentService $service;
     private Request $request;
 
     public function __construct()
     {
-        $this->service = new EmployeeService();
-
+        $this->service = new DepartmentService();
         $this->request = new Request();
     }
 
     /**
-     * List Employees
+     * List Departments
      */
     public function index(): void
     {
@@ -32,26 +30,22 @@ class EmployeeController
             $this->request->get('search', '')
         );
 
-        $employees = $this->service->all(
+        $departments = $this->service->all(
             $search
         );
 
         View::render(
-            'admin/employees/index',
+            'admin/departments/index',
             [
-                'title' => 'Employees',
+                'title' => 'Departments',
 
-                'employees' => $employees,
+                'departments' => $departments,
 
                 'search' => $search,
 
-                'success' => Session::getFlash(
-                    'success'
-                ),
+                'success' => Session::getFlash('success'),
 
-                'error' => Session::getFlash(
-                    'error'
-                )
+                'error' => Session::getFlash('error')
             ]
         );
     }
@@ -61,36 +55,16 @@ class EmployeeController
      */
     public function create(): void
     {
-        $jobTitles = $this->service->jobTitles();
-
-        $companies = $this->service->companies();
-
-        $branches = $this->service->branches();
-
-        $departments = $this->service->departments();
-
-        $locations = $this->service->locations();
-
         View::render(
-            'admin/employees/create',
+            'admin/departments/create',
             [
-                'title' => 'Add Employee',
-
-                'jobTitles' => $jobTitles,
-
-                'companies' => $companies,
-
-                'branches' => $branches,
-
-                'departments' => $departments,
-
-                'locations' => $locations
+                'title' => 'Add Department'
             ]
         );
     }
 
     /**
-     * Store Employee
+     * Store Department
      */
     public function store(): void
     {
@@ -106,8 +80,10 @@ class EmployeeController
             );
 
             Response::redirect(
-                '/admin/employees/create'
+                '/admin/departments/create'
             );
+
+            return;
         }
 
         Session::flash(
@@ -116,7 +92,7 @@ class EmployeeController
         );
 
         Response::redirect(
-            '/admin/employees'
+            '/admin/departments'
         );
     }
 
@@ -131,66 +107,64 @@ class EmployeeController
 
             Session::flash(
                 'error',
-                'Invalid employee ID.'
+                'Invalid department ID.'
             );
 
             Response::redirect(
-                '/admin/employees'
+                '/admin/departments'
             );
+
+            return;
         }
 
-        $employee = $this->service->find($id);
+        $department = $this->service->find($id);
 
-        if (!$employee) {
+        if (!$department) {
 
             Session::flash(
                 'error',
-                'Employee not found.'
+                'Department not found.'
             );
 
             Response::redirect(
-                '/admin/employees'
+                '/admin/departments'
             );
+
+            return;
         }
 
-        $jobTitles = $this->service->jobTitles();
-
-        $companies = $this->service->companies();
-
-        $branches = $this->service->branches();
-
-        $departments = $this->service->departments();
-
-        $locations = $this->service->locations();
-
         View::render(
-            'admin/employees/edit',
+            'admin/departments/edit',
             [
-                'title' => 'Edit Employee',
+                'title' => 'Edit Department',
 
-                'employee' => $employee,
-
-                'jobTitles' => $jobTitles,
-
-                'companies' => $companies,
-
-                'branches' => $branches,
-
-                'departments' => $departments,
-
-                'locations' => $locations
+                'department' => $department
             ]
         );
     }
 
     /**
-     * Update Employee
+     * Update Department
      */
     public function update(): void
     {
         $id = (int) (
             $_POST['id'] ?? 0
         );
+
+        if ($id <= 0) {
+
+            Session::flash(
+                'error',
+                'Invalid department ID.'
+            );
+
+            Response::redirect(
+                '/admin/departments'
+            );
+
+            return;
+        }
 
         $result = $this->service->update(
             $id,
@@ -205,18 +179,32 @@ class EmployeeController
         );
 
         Response::redirect(
-            '/admin/employees'
+            '/admin/departments'
         );
     }
 
     /**
-     * Deactivate Employee
+     * Deactivate Department
      */
     public function deactivate(): void
     {
         $id = (int) (
             $_POST['id'] ?? 0
         );
+
+        if ($id <= 0) {
+
+            Session::flash(
+                'error',
+                'Invalid department ID.'
+            );
+
+            Response::redirect(
+                '/admin/departments'
+            );
+
+            return;
+        }
 
         $result = $this->service->deactivate(
             $id
@@ -230,7 +218,7 @@ class EmployeeController
         );
 
         Response::redirect(
-            '/admin/employees'
+            '/admin/departments'
         );
     }
 }

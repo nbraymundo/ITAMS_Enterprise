@@ -6,7 +6,8 @@ namespace App\Core;
 
 use App\Controllers\Auth\LoginController;
 use App\Controllers\Dashboard\DashboardController;
-use App\Controllers\Asset\AssetController;
+use App\Controllers\Admin\AssetController;
+
 use App\Controllers\Admin\AssetCategoryController;
 use App\Controllers\Admin\ManufacturerController;
 use App\Controllers\Admin\BrandController;
@@ -14,8 +15,11 @@ use App\Controllers\Admin\ModelController;
 use App\Controllers\Admin\CompanyController;
 use App\Controllers\Admin\BranchController;
 use App\Controllers\Admin\LocationController;
+use App\Controllers\Admin\DepartmentController;
 use App\Controllers\Admin\EmployeeController;
+use App\Controllers\Admin\JobTitleController;
 use App\Controllers\Admin\AuditLogController;
+
 
 class Application
 {
@@ -29,6 +33,7 @@ class Application
 
         Session::start();
 
+
         /*
         |--------------------------------------------------------------------------
         | Initialize Database Connection
@@ -37,6 +42,7 @@ class Application
 
         Database::connection();
 
+
         /*
         |--------------------------------------------------------------------------
         | Create Request & Router
@@ -44,7 +50,9 @@ class Application
         */
 
         $request = new Request();
-        $router  = new Router();
+
+        $router = new Router();
+
 
         /*
         |--------------------------------------------------------------------------
@@ -61,6 +69,7 @@ class Application
             '/dashboard',
             [DashboardController::class, 'index']
         );
+
 
         /*
         |--------------------------------------------------------------------------
@@ -83,6 +92,7 @@ class Application
             [LoginController::class, 'logout']
         );
 
+
         /*
         |--------------------------------------------------------------------------
         | Asset Management
@@ -97,6 +107,11 @@ class Application
         $router->get(
             '/assets/create',
             [AssetController::class, 'create']
+        );
+
+        $router->get(
+            '/assets/view',
+            [AssetController::class, 'view']
         );
 
         $router->post(
@@ -118,6 +133,7 @@ class Application
             '/assets/delete',
             [AssetController::class, 'delete']
         );
+
 
         /*
         |--------------------------------------------------------------------------
@@ -155,6 +171,7 @@ class Application
             [AssetCategoryController::class, 'deactivate']
         );
 
+
         /*
         |--------------------------------------------------------------------------
         | Manufacturers
@@ -190,6 +207,7 @@ class Application
             '/admin/manufacturers/deactivate',
             [ManufacturerController::class, 'deactivate']
         );
+
 
         /*
         |--------------------------------------------------------------------------
@@ -227,6 +245,7 @@ class Application
             [BrandController::class, 'deactivate']
         );
 
+
         /*
         |--------------------------------------------------------------------------
         | Asset Models
@@ -262,6 +281,7 @@ class Application
             '/admin/models/deactivate',
             [ModelController::class, 'deactivate']
         );
+
 
         /*
         |--------------------------------------------------------------------------
@@ -299,6 +319,7 @@ class Application
             [CompanyController::class, 'deactivate']
         );
 
+
         /*
         |--------------------------------------------------------------------------
         | Branches
@@ -334,6 +355,7 @@ class Application
             '/admin/branches/deactivate',
             [BranchController::class, 'deactivate']
         );
+
 
         /*
         |--------------------------------------------------------------------------
@@ -371,6 +393,81 @@ class Application
             [LocationController::class, 'deactivate']
         );
 
+
+        /*
+        |--------------------------------------------------------------------------
+        | Departments
+        |--------------------------------------------------------------------------
+        */
+
+        $router->get(
+            '/admin/departments',
+            [DepartmentController::class, 'index']
+        );
+
+        $router->get(
+            '/admin/departments/create',
+            [DepartmentController::class, 'create']
+        );
+
+        $router->post(
+            '/admin/departments',
+            [DepartmentController::class, 'store']
+        );
+
+        $router->get(
+            '/admin/departments/edit',
+            [DepartmentController::class, 'edit']
+        );
+
+        $router->post(
+            '/admin/departments/update',
+            [DepartmentController::class, 'update']
+        );
+
+        $router->post(
+            '/admin/departments/deactivate',
+            [DepartmentController::class, 'deactivate']
+        );
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Job Titles
+        |--------------------------------------------------------------------------
+        */
+
+        $router->get(
+            '/admin/job-titles',
+            [JobTitleController::class, 'index']
+        );
+
+        $router->get(
+            '/admin/job-titles/create',
+            [JobTitleController::class, 'create']
+        );
+
+        $router->post(
+            '/admin/job-titles',
+            [JobTitleController::class, 'store']
+        );
+
+        $router->get(
+            '/admin/job-titles/edit',
+            [JobTitleController::class, 'edit']
+        );
+
+        $router->post(
+            '/admin/job-titles/update',
+            [JobTitleController::class, 'update']
+        );
+
+        $router->post(
+            '/admin/job-titles/deactivate',
+            [JobTitleController::class, 'deactivate']
+        );
+
+
         /*
         |--------------------------------------------------------------------------
         | Employees
@@ -407,6 +504,7 @@ class Application
             [EmployeeController::class, 'deactivate']
         );
 
+
         /*
         |--------------------------------------------------------------------------
         | Audit Logs
@@ -417,6 +515,7 @@ class Application
             '/admin/audit-logs',
             [AuditLogController::class, 'index']
         );
+
 
         /*
         |--------------------------------------------------------------------------

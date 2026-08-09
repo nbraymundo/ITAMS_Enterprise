@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Controllers\Asset;
+namespace App\Controllers\Admin;
 
 use App\Core\Session;
 use App\Core\View;
@@ -227,6 +227,7 @@ class AssetController
         return [
             // Lifecycle-protected values are preserved during edit.
             'asset_tag' => trim((string)($_POST['asset_tag'] ?? ($existing['asset_tag'] ?? ''))),
+            'finance_asset_code' => $this->nullableString($_POST['finance_asset_code'] ?? ($existing['finance_asset_code'] ?? null)),
             'asset_name' => trim((string)($_POST['asset_name'] ?? '')),
             'serial_number' => trim((string)($_POST['serial_number'] ?? '')),
             'category_id' => $categoryId,
@@ -274,14 +275,6 @@ class AssetController
 
         if ($data['category_id'] <= 0) {
             $errors[] = 'Category is required.';
-        }
-
-        if ($data['brand_id'] === null) {
-            $errors[] = 'Brand is required.';
-        }
-
-        if ($data['model_id'] === null) {
-            $errors[] = 'Model is required.';
         }
 
         if ($data['company_id'] === null) {

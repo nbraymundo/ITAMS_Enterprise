@@ -16,101 +16,90 @@ class AssetCategory
         $this->db = Database::connection();
     }
 
-    /**
- * Get Categories with Search + Pagination + Sorting
- */
-public function all(
-    string $search = '',
-    int $page = 1,
-    int $perPage = 10,
-    string $sort = 'category_name',
-    string $direction = 'ASC'
-): array {
+    public function all(
+        string $search = '',
+        int $page = 1,
+        int $perPage = 10,
+        string $sort = 'category_name',
+        string $direction = 'ASC'
+    ): array {
+        $allowedSort = [
+            'category_code',
+            'category_name',
+            'description',
+            'has_device_specs',
+            'status',
+            'sort_order'
+        ];
 
-    $allowedSort = [
-        'category_code',
-        'category_name',
-        'description',
-        'status',
-        'sort_order'
-    ];
+        if (!in_array($sort, $allowedSort, true)) {
+            $sort = 'category_name';
+        }
 
-    if (!in_array($sort, $allowedSort, true)) {
-        $sort = 'category_name';
-    }
+        $direction = strtoupper($direction);
 
-    $direction = strtoupper($direction);
+        if (!in_array($direction, ['ASC', 'DESC'], true)) {
+            $direction = 'ASC';
+        }
 
-    if (!in_array($direction, ['ASC', 'DESC'], true)) {
-        $direction = 'ASC';
-    }
+        $offset = ($page - 1) * $perPage;
 
-    $offset = ($page - 1) * $perPage;
-
-    $sql = "
-        SELECT
-            ac.*,
-
-            (
-                SELECT COUNT(*)
-                FROM assets a
-                WHERE a.category_id = ac.id
-            ) AS total_assets
-
-        FROM asset_categories ac
-    ";
-
-    $params = [];
-
-    if ($search !== '') {
-
-        $sql .= "
-            WHERE
-                ac.category_code LIKE ?
-                OR ac.category_name LIKE ?
-                OR ac.description LIKE ?
+        $sql = "
+            SELECT
+                ac.*,
+                (
+                    SELECT COUNT(*)
+                    FROM assets a
+                    WHERE a.category_id = ac.id
+                ) AS total_assets
+            FROM asset_categories ac
         ";
 
-        $keyword = '%' . $search . '%';
+        $params = [];
 
-        $params = [
-            $keyword,
-            $keyword,
-            $keyword
-        ];
+        if ($search !== '') {
+            $sql .= "
+                WHERE
+                    ac.category_code LIKE ?
+                    OR ac.category_name LIKE ?
+                    OR ac.description LIKE ?
+            ";
+
+            $keyword = '%' . $search . '%';
+
+            $params = [
+                $keyword,
+                $keyword,
+                $keyword
+            ];
+        }
+
+        $sql .= "
+            ORDER BY {$sort} {$direction}
+            LIMIT ?
+            OFFSET ?
+        ";
+
+        $params[] = $perPage;
+        $params[] = $offset;
+
+        $stmt = $this->db->prepare($sql);
+
+        foreach ($params as $i => $value) {
+            $stmt->bindValue(
+                $i + 1,
+                $value,
+                is_int($value)
+                    ? PDO::PARAM_INT
+                    : PDO::PARAM_STR
+            );
+        }
+
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    $sql .= "
-        ORDER BY {$sort} {$direction}
-        LIMIT ?
-        OFFSET ?
-    ";
-
-    $params[] = $perPage;
-    $params[] = $offset;
-
-    $stmt = $this->db->prepare($sql);
-
-    foreach ($params as $i => $value) {
-
-        $stmt->bindValue(
-            $i + 1,
-            $value,
-            is_int($value)
-                ? PDO::PARAM_INT
-                : PDO::PARAM_STR
-        );
-    }
-
-    $stmt->execute();
-
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    }
-
-    /**
-     * Count Categories
-     */
     public function countAll(string $search = ''): int
     {
         $sql = "
@@ -121,7 +110,6 @@ public function all(
         $params = [];
 
         if ($search !== '') {
-
             $sql .= "
                 WHERE
                     category_code LIKE ?
@@ -144,9 +132,6 @@ public function all(
         return (int) $stmt->fetchColumn();
     }
 
-    /**
-     * Find
-     */
     public function find(int $id): array|false
     {
         $stmt = $this->db->prepare("
@@ -160,9 +145,6 @@ public function all(
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * Create
-     */
     public function create(array $data): bool
     {
         $stmt = $this->db->prepare("
@@ -171,6 +153,7 @@ public function all(
                 category_code,
                 category_name,
                 description,
+                has_device_specs,
                 icon,
                 color,
                 sort_order,
@@ -178,7 +161,7 @@ public function all(
             )
             VALUES
             (
-                ?,?,?,?,?,?,?
+                ?,?,?,?,?,?,?,?
             )
         ");
 
@@ -186,6 +169,7 @@ public function all(
             $data['category_code'],
             $data['category_name'],
             $data['description'],
+            $data['has_device_specs'],
             $data['icon'],
             $data['color'],
             $data['sort_order'],
@@ -193,28 +177,27 @@ public function all(
         ]);
     }
 
-    /**
-     * Update
-     */
     public function update(int $id, array $data): bool
     {
         $stmt = $this->db->prepare("
             UPDATE asset_categories
             SET
-                category_code=?,
-                category_name=?,
-                description=?,
-                icon=?,
-                color=?,
-                sort_order=?,
-                status=?
-            WHERE id=?
+                category_code = ?,
+                category_name = ?,
+                description = ?,
+                has_device_specs = ?,
+                icon = ?,
+                color = ?,
+                sort_order = ?,
+                status = ?
+            WHERE id = ?
         ");
 
         return $stmt->execute([
             $data['category_code'],
             $data['category_name'],
             $data['description'],
+            $data['has_device_specs'],
             $data['icon'],
             $data['color'],
             $data['sort_order'],
@@ -223,15 +206,12 @@ public function all(
         ]);
     }
 
-    /**
-     * Deactivate
-     */
     public function deactivate(int $id): bool
     {
         $stmt = $this->db->prepare("
             UPDATE asset_categories
-            SET status='Inactive'
-            WHERE id=?
+            SET status = 'Inactive'
+            WHERE id = ?
         ");
 
         return $stmt->execute([$id]);
@@ -242,7 +222,7 @@ public function all(
         $stmt = $this->db->prepare("
             SELECT COUNT(*)
             FROM asset_categories
-            WHERE category_code=?
+            WHERE category_code = ?
         ");
 
         $stmt->execute([$code]);
@@ -255,7 +235,7 @@ public function all(
         $stmt = $this->db->prepare("
             SELECT COUNT(*)
             FROM asset_categories
-            WHERE category_name=?
+            WHERE category_name = ?
         ");
 
         $stmt->execute([$name]);
@@ -268,8 +248,8 @@ public function all(
         $stmt = $this->db->prepare("
             SELECT COUNT(*)
             FROM asset_categories
-            WHERE category_code=?
-            AND id<>?
+            WHERE category_code = ?
+              AND id <> ?
         ");
 
         $stmt->execute([
@@ -285,8 +265,8 @@ public function all(
         $stmt = $this->db->prepare("
             SELECT COUNT(*)
             FROM asset_categories
-            WHERE category_name=?
-            AND id<>?
+            WHERE category_name = ?
+              AND id <> ?
         ");
 
         $stmt->execute([
@@ -302,7 +282,7 @@ public function all(
         $stmt = $this->db->prepare("
             SELECT COUNT(*)
             FROM assets
-            WHERE category_id=?
+            WHERE category_id = ?
         ");
 
         $stmt->execute([$id]);

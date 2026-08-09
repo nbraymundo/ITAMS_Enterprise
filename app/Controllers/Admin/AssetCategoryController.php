@@ -21,74 +21,72 @@ class AssetCategoryController
         $this->service = new AssetCategoryService();
     }
 
-    /**
- * Asset Category List
- */
-public function index(): void
-{
-    AuthMiddleware::handle();
+    public function index(): void
+    {
+        AuthMiddleware::handle();
 
-    $request = new Request();
+        $request = new Request();
 
-    $search = trim((string)$request->get('search', ''));
+        $search = trim(
+            (string) $request->get('search', '')
+        );
 
-    $page = max(
-        1,
-        (int)$request->get('page', 1)
-    );
+        $page = max(
+            1,
+            (int) $request->get('page', 1)
+        );
 
-    $perPage = max(
-        1,
-        (int)$request->get('per_page', 10)
-    );
+        $perPage = max(
+            1,
+            (int) $request->get('per_page', 10)
+        );
 
-    $sort = (string)$request->get(
-        'sort',
-        'category_name'
-    );
+        $sort = (string) $request->get(
+            'sort',
+            'category_name'
+        );
 
-    $direction = strtoupper(
-        (string)$request->get(
-            'direction',
-            'ASC'
-        )
-    );
+        $direction = strtoupper(
+            (string) $request->get(
+                'direction',
+                'ASC'
+            )
+        );
 
-    $totalRecords = $this->service->countAll($search);
+        $totalRecords = $this->service->countAll(
+            $search
+        );
 
-    $paginator = new Paginator(
-        $totalRecords,
-        $page,
-        $perPage
-    );
+        $paginator = new Paginator(
+            $totalRecords,
+            $page,
+            $perPage
+        );
 
-    $categories = $this->service->all(
-        $search,
-        $page,
-        $perPage,
-        $sort,
-        $direction
-    );
+        $categories = $this->service->all(
+            $search,
+            $page,
+            $perPage,
+            $sort,
+            $direction
+        );
 
-    View::render(
-        'admin/asset-categories/index',
-        [
-            'title'       => 'Asset Categories',
-            'categories'  => $categories,
-            'search'      => $search,
-            'perPage'     => $perPage,
-            'sort'        => $sort,
-            'direction'   => $direction,
-            'paginator'   => $paginator,
-            'success'     => Session::getFlash('success'),
-            'error'       => Session::getFlash('error')
-        ]
-    );
-}
+        View::render(
+            'admin/asset-categories/index',
+            [
+                'title' => 'Asset Categories',
+                'categories' => $categories,
+                'search' => $search,
+                'perPage' => $perPage,
+                'sort' => $sort,
+                'direction' => $direction,
+                'paginator' => $paginator,
+                'success' => Session::getFlash('success'),
+                'error' => Session::getFlash('error')
+            ]
+        );
+    }
 
-    /**
-     * Create Form
-     */
     public function create(): void
     {
         AuthMiddleware::handle();
@@ -101,9 +99,6 @@ public function index(): void
         );
     }
 
-    /**
-     * Store
-     */
     public function store(): void
     {
         AuthMiddleware::handle();
@@ -111,23 +106,35 @@ public function index(): void
         $request = new Request();
 
         $result = $this->service->create([
-            'category_code' => strtoupper(trim((string) $request->post('category_code'))),
-            'category_name' => trim((string) $request->post('category_name')),
-            'description'   => trim((string) $request->post('description')),
-            'icon'          => trim((string) $request->post('icon')),
-            'color'         => trim((string) $request->post('color')),
-            'sort_order'    => (int) $request->post('sort_order'),
-            'status'        => (string) $request->post('status')
+            'category_code' => $request->post(
+                'category_code'
+            ),
+            'category_name' => $request->post(
+                'category_name'
+            ),
+            'description' => $request->post(
+                'description'
+            ),
+            'has_device_specs' => $request->post(
+                'has_device_specs'
+            ),
+            'icon' => $request->post('icon'),
+            'color' => $request->post('color'),
+            'sort_order' => $request->post(
+                'sort_order'
+            ),
+            'status' => $request->post('status')
         ]);
 
         if (!$result['success']) {
-
             Session::flash(
                 'error',
                 $result['message']
             );
 
-            Response::redirect('/admin/asset-categories/create');
+            Response::redirect(
+                '/admin/asset-categories/create'
+            );
         }
 
         Session::flash(
@@ -135,12 +142,11 @@ public function index(): void
             $result['message']
         );
 
-        Response::redirect('/admin/asset-categories');
+        Response::redirect(
+            '/admin/asset-categories'
+        );
     }
 
-    /**
-     * Edit
-     */
     public function edit(): void
     {
         AuthMiddleware::handle();
@@ -152,27 +158,25 @@ public function index(): void
         $category = $this->service->find($id);
 
         if (!$category) {
-
             Session::flash(
                 'error',
                 'Category not found.'
             );
 
-            Response::redirect('/admin/asset-categories');
+            Response::redirect(
+                '/admin/asset-categories'
+            );
         }
 
         View::render(
             'admin/asset-categories/edit',
             [
-                'title'    => 'Edit Asset Category',
+                'title' => 'Edit Asset Category',
                 'category' => $category
             ]
         );
     }
 
-    /**
-     * Update
-     */
     public function update(): void
     {
         AuthMiddleware::handle();
@@ -184,24 +188,36 @@ public function index(): void
         $result = $this->service->update(
             $id,
             [
-                'category_code' => strtoupper(trim((string) $request->post('category_code'))),
-                'category_name' => trim((string) $request->post('category_name')),
-                'description'   => trim((string) $request->post('description')),
-                'icon'          => trim((string) $request->post('icon')),
-                'color'         => trim((string) $request->post('color')),
-                'sort_order'    => (int) $request->post('sort_order'),
-                'status'        => (string) $request->post('status')
+                'category_code' => $request->post(
+                    'category_code'
+                ),
+                'category_name' => $request->post(
+                    'category_name'
+                ),
+                'description' => $request->post(
+                    'description'
+                ),
+                'has_device_specs' => $request->post(
+                    'has_device_specs'
+                ),
+                'icon' => $request->post('icon'),
+                'color' => $request->post('color'),
+                'sort_order' => $request->post(
+                    'sort_order'
+                ),
+                'status' => $request->post('status')
             ]
         );
 
         if (!$result['success']) {
-
             Session::flash(
                 'error',
                 $result['message']
             );
 
-            Response::redirect('/admin/asset-categories/edit?id=' . $id);
+            Response::redirect(
+                '/admin/asset-categories/edit?id=' . $id
+            );
         }
 
         Session::flash(
@@ -209,12 +225,11 @@ public function index(): void
             $result['message']
         );
 
-        Response::redirect('/admin/asset-categories');
+        Response::redirect(
+            '/admin/asset-categories'
+        );
     }
 
-    /**
-     * Deactivate
-     */
     public function deactivate(): void
     {
         AuthMiddleware::handle();
@@ -226,13 +241,14 @@ public function index(): void
         $result = $this->service->deactivate($id);
 
         if (!$result['success']) {
-
             Session::flash(
                 'error',
                 $result['message']
             );
 
-            Response::redirect('/admin/asset-categories');
+            Response::redirect(
+                '/admin/asset-categories'
+            );
         }
 
         Session::flash(
@@ -240,6 +256,8 @@ public function index(): void
             $result['message']
         );
 
-        Response::redirect('/admin/asset-categories');
+        Response::redirect(
+            '/admin/asset-categories'
+        );
     }
 }

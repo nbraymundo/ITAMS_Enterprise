@@ -23,10 +23,29 @@ class Employee
     {
         $sql = "
             SELECT
-                e.*,
+                e.id,
+                e.employee_no,
 
+                e.first_name,
+                e.middle_name,
+                e.last_name,
+
+                e.company_id,
+                e.branch_id,
+                e.department_id,
+                e.section_id,
+                e.location_id,
+                e.job_title_id,
+
+                e.email,
+                e.mobile_no,
+                e.employment_status,
+                e.hired_date,
+
+                jt.job_title_code,
                 jt.job_title,
 
+                d.department_code,
                 d.department_name,
 
                 l.location_code,
@@ -50,20 +69,32 @@ class Employee
                 ON l.id = e.location_id
 
             LEFT JOIN branches b
-                ON b.id = l.branch_id
+                ON b.id = e.branch_id
 
             LEFT JOIN companies c
-                ON c.id = b.company_id
+                ON c.id = e.company_id
 
             WHERE
                 e.employee_no LIKE :employee_no
+
                 OR e.first_name LIKE :first_name
+
+                OR e.middle_name LIKE :middle_name
+
                 OR e.last_name LIKE :last_name
+
                 OR e.email LIKE :email
+
+                OR e.mobile_no LIKE :mobile_no
+
                 OR jt.job_title LIKE :job_title
+
                 OR d.department_name LIKE :department
+
                 OR l.location_name LIKE :location
+
                 OR b.branch_name LIKE :branch
+
                 OR c.company_name LIKE :company
 
             ORDER BY
@@ -88,6 +119,12 @@ class Employee
         );
 
         $stmt->bindValue(
+            ':middle_name',
+            $searchValue,
+            PDO::PARAM_STR
+        );
+
+        $stmt->bindValue(
             ':last_name',
             $searchValue,
             PDO::PARAM_STR
@@ -95,6 +132,12 @@ class Employee
 
         $stmt->bindValue(
             ':email',
+            $searchValue,
+            PDO::PARAM_STR
+        );
+
+        $stmt->bindValue(
+            ':mobile_no',
             $searchValue,
             PDO::PARAM_STR
         );
@@ -141,10 +184,29 @@ class Employee
     {
         $stmt = $this->db->prepare("
             SELECT
-                e.*,
+                e.id,
+                e.employee_no,
 
+                e.first_name,
+                e.middle_name,
+                e.last_name,
+
+                e.company_id,
+                e.branch_id,
+                e.department_id,
+                e.section_id,
+                e.location_id,
+                e.job_title_id,
+
+                e.email,
+                e.mobile_no,
+                e.employment_status,
+                e.hired_date,
+
+                jt.job_title_code,
                 jt.job_title,
 
+                d.department_code,
                 d.department_name,
 
                 l.location_code,
@@ -168,12 +230,14 @@ class Employee
                 ON l.id = e.location_id
 
             LEFT JOIN branches b
-                ON b.id = l.branch_id
+                ON b.id = e.branch_id
 
             LEFT JOIN companies c
-                ON c.id = b.company_id
+                ON c.id = e.company_id
 
             WHERE e.id = ?
+
+            LIMIT 1
         ");
 
         $stmt->execute([$id]);
@@ -221,18 +285,20 @@ class Employee
     }
 
     /**
-     * Get active job titles
-     *
-     * Job Title is controlled master data.
+     * Get active Job Titles
      */
     public function jobTitles(): array
     {
         $stmt = $this->db->prepare("
             SELECT
                 id,
+                job_title_code,
                 job_title
+
             FROM job_titles
+
             WHERE status = 'Active'
+
             ORDER BY job_title ASC
         ");
 
@@ -242,16 +308,67 @@ class Employee
     }
 
     /**
-     * Get active departments
+     * Get active Companies
+     */
+    public function companies(): array
+    {
+        $stmt = $this->db->prepare("
+            SELECT
+                id,
+                company_code,
+                company_name
+
+            FROM companies
+
+            WHERE status = 'Active'
+
+            ORDER BY company_name ASC
+        ");
+
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Get active Branches
+     */
+    public function branches(): array
+    {
+        $stmt = $this->db->prepare("
+            SELECT
+                id,
+                branch_code,
+                branch_name,
+                company_id
+
+            FROM branches
+
+            WHERE status = 'Active'
+
+            ORDER BY branch_name ASC
+        ");
+
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Get active Departments
      */
     public function departments(): array
     {
         $stmt = $this->db->prepare("
             SELECT
                 id,
+                department_code,
                 department_name
+
             FROM departments
+
             WHERE status = 'Active'
+
             ORDER BY department_name ASC
         ");
 
@@ -261,7 +378,7 @@ class Employee
     }
 
     /**
-     * Get active locations
+     * Get active Locations
      */
     public function locations(): array
     {
@@ -270,6 +387,8 @@ class Employee
                 l.id,
                 l.location_code,
                 l.location_name,
+
+                l.branch_id,
 
                 b.branch_code,
                 b.branch_name,
@@ -308,33 +427,60 @@ class Employee
             (
                 employee_no,
                 first_name,
+                middle_name,
                 last_name,
-                email,
-                phone,
-                job_title_id,
+
+                company_id,
+                branch_id,
                 department_id,
+                section_id,
                 location_id,
+                job_title_id,
+
+                email,
+                mobile_no,
                 employment_status,
-                status
+                hired_date
             )
+
             VALUES
             (
-                ?, ?, ?, ?, ?,
-                ?, ?, ?, ?, ?
+                ?,
+                ?,
+                ?,
+                ?,
+
+                ?,
+                ?,
+                ?,
+                ?,
+                ?,
+                ?,
+
+                ?,
+                ?,
+                ?,
+                ?
             )
         ");
 
         return $stmt->execute([
             $data['employee_no'],
             $data['first_name'],
+            $data['middle_name'] ?? null,
             $data['last_name'],
-            $data['email'] ?? null,
-            $data['phone'] ?? null,
-            $data['job_title_id'],
+
+            $data['company_id'],
+            $data['branch_id'],
             $data['department_id'],
-            $data['location_id'],
-            $data['employment_status'] ?? 'Regular',
-            $data['status'] ?? 'Active'
+            $data['section_id'] ?? null,
+            $data['location_id'] ?? null,
+            $data['job_title_id'],
+
+            $data['email'] ?? null,
+            $data['mobile_no'] ?? null,
+            $data['employment_status'] ?? 'Active',
+            $data['hired_date'] ?? null
         ]);
     }
 
@@ -347,17 +493,24 @@ class Employee
     ): bool {
         $stmt = $this->db->prepare("
             UPDATE employees
+
             SET
                 employee_no = ?,
                 first_name = ?,
+                middle_name = ?,
                 last_name = ?,
-                email = ?,
-                phone = ?,
-                job_title_id = ?,
+
+                company_id = ?,
+                branch_id = ?,
                 department_id = ?,
+                section_id = ?,
                 location_id = ?,
+                job_title_id = ?,
+
+                email = ?,
+                mobile_no = ?,
                 employment_status = ?,
-                status = ?
+                hired_date = ?
 
             WHERE id = ?
         ");
@@ -365,26 +518,38 @@ class Employee
         return $stmt->execute([
             $data['employee_no'],
             $data['first_name'],
+            $data['middle_name'] ?? null,
             $data['last_name'],
-            $data['email'] ?? null,
-            $data['phone'] ?? null,
-            $data['job_title_id'],
+
+            $data['company_id'],
+            $data['branch_id'],
             $data['department_id'],
-            $data['location_id'],
-            $data['employment_status'] ?? 'Regular',
-            $data['status'] ?? 'Active',
+            $data['section_id'] ?? null,
+            $data['location_id'] ?? null,
+            $data['job_title_id'],
+
+            $data['email'] ?? null,
+            $data['mobile_no'] ?? null,
+            $data['employment_status'] ?? 'Active',
+            $data['hired_date'] ?? null,
+
             $id
         ]);
     }
 
     /**
      * Deactivate employee
+     *
+     * Employee status is controlled by
+     * employment_status in the actual schema.
      */
     public function deactivate(int $id): bool
     {
         $stmt = $this->db->prepare("
             UPDATE employees
-            SET status = 'Inactive'
+
+            SET employment_status = 'Inactive'
+
             WHERE id = ?
         ");
 

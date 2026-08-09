@@ -1,7 +1,28 @@
-<hr>
+<footer class="itams-footer">
 
-<footer>
+    <div class="itams-footer-left">
 
-ITAMS Enterprise © <?= date('Y') ?>
+        <span class="itams-footer-brand">
+            ITAMS Enterprise
+        </span>
+
+        <span class="itams-footer-separator">
+            |
+        </span>
+
+        <span>
+            IT Asset Management System
+        </span>
+
+    </div>
+
+
+    <div class="itams-footer-right">
+
+        <span>
+            &copy; <?= date('Y') ?> All Rights Reserved.
+        </span>
+
+    </div>
 
 </footer>

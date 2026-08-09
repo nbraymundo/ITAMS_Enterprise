@@ -17,9 +17,6 @@ class AssetCategoryService
         $this->audit = new AuditLogService();
     }
 
-    /**
-     * Get Categories
-     */
     public function all(
         string $search = '',
         int $page = 1,
@@ -36,38 +33,26 @@ class AssetCategoryService
         );
     }
 
-    /**
-     * Total Records
-     */
     public function countAll(string $search = ''): int
     {
         return $this->model->countAll($search);
     }
 
-    /**
-     * Find Category
-     */
     public function find(int $id): array|false
     {
         return $this->model->find($id);
     }
 
-    /**
-     * Create Category
-     */
     public function create(array $data): array
     {
-        if (trim($data['category_code']) === '') {
-            return [
-                'success' => false,
-                'message' => 'Category Code is required.'
-            ];
-        }
+        $data = $this->normalize($data);
 
-        if (trim($data['category_name']) === '') {
+        $validation = $this->validate($data);
+
+        if ($validation !== null) {
             return [
                 'success' => false,
-                'message' => 'Category Name is required.'
+                'message' => $validation
             ];
         }
 
@@ -96,7 +81,10 @@ class AssetCategoryService
             'Asset Categories',
             'CREATE',
             null,
-            'Created category: ' . $data['category_code']
+            'Created category: '
+            . $data['category_code']
+            . ' | Device Specs: '
+            . ($data['has_device_specs'] ? 'Yes' : 'No')
         );
 
         return [
@@ -105,25 +93,18 @@ class AssetCategoryService
         ];
     }
 
-    /**
-     * Update Category
-     */
     public function update(
         int $id,
         array $data
     ): array {
+        $data = $this->normalize($data);
 
-        if (trim($data['category_code']) === '') {
+        $validation = $this->validate($data);
+
+        if ($validation !== null) {
             return [
                 'success' => false,
-                'message' => 'Category Code is required.'
-            ];
-        }
-
-        if (trim($data['category_name']) === '') {
-            return [
-                'success' => false,
-                'message' => 'Category Name is required.'
+                'message' => $validation
             ];
         }
 
@@ -147,10 +128,7 @@ class AssetCategoryService
             ];
         }
 
-        if (!$this->model->update(
-            $id,
-            $data
-        )) {
+        if (!$this->model->update($id, $data)) {
             return [
                 'success' => false,
                 'message' => 'Unable to update category.'
@@ -161,7 +139,10 @@ class AssetCategoryService
             'Asset Categories',
             'UPDATE',
             $id,
-            'Updated category: ' . $data['category_code']
+            'Updated category: '
+            . $data['category_code']
+            . ' | Device Specs: '
+            . ($data['has_device_specs'] ? 'Yes' : 'No')
         );
 
         return [
@@ -170,9 +151,6 @@ class AssetCategoryService
         ];
     }
 
-    /**
-     * Deactivate Category
-     */
     public function deactivate(int $id): array
     {
         $assetCount = $this->model->assetCount($id);
@@ -202,5 +180,52 @@ class AssetCategoryService
             'success' => true,
             'message' => 'Category deactivated successfully.'
         ];
+    }
+
+    private function normalize(array $data): array
+    {
+        return [
+            'category_code' => strtoupper(
+                trim((string) ($data['category_code'] ?? ''))
+            ),
+            'category_name' => trim(
+                (string) ($data['category_name'] ?? '')
+            ),
+            'description' => trim(
+                (string) ($data['description'] ?? '')
+            ),
+            'has_device_specs' => !empty(
+                $data['has_device_specs']
+            ) ? 1 : 0,
+            'icon' => trim(
+                (string) ($data['icon'] ?? '')
+            ),
+            'color' => trim(
+                (string) ($data['color'] ?? '')
+            ),
+            'sort_order' => (int) (
+                $data['sort_order'] ?? 0
+            ),
+            'status' => (
+                ($data['status'] ?? 'Active') === 'Inactive'
+            ) ? 'Inactive' : 'Active',
+        ];
+    }
+
+    private function validate(array $data): ?string
+    {
+        if ($data['category_code'] === '') {
+            return 'Category Code is required.';
+        }
+
+        if ($data['category_name'] === '') {
+            return 'Category Name is required.';
+        }
+
+        if ($data['sort_order'] < 0) {
+            return 'Sort Order cannot be negative.';
+        }
+
+        return null;
     }
 }
